@@ -1,1 +1,3 @@
-# svelte-tutorial
+# Wordle Challenge
+
+try word, make score!
