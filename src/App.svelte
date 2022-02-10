@@ -1,30 +1,32 @@
 <script>
-	export let name;
+	import "./style.css";
+	import Header from "./components/Header.svelte";
+	import GameBoard from "./components/GameBoard.svelte";
+	import Keyboard from "./components/Keyboard.svelte";
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<div id="app" class="nightmode">
+	<div class="container">
+		<Header/>
+		<GameBoard/>
+		<Keyboard/>
+	</div>
+</div>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+	#app{
+		width: 100vw;
+		height: 100%;
+		background-color: var(--color-background);
+		display: flex;
+  		justify-content: center;
 	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+	.container{
+		width:var(--width);
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+	
 </style>
