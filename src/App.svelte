@@ -5,14 +5,23 @@
 	import Keyboard from "./components/Keyboard.svelte";
 </script>
 
-<div class="nightmode">
-	<Header/>
-	<GameBoard/>
-	<Keyboard/>
+<div id="app" class="nightmode">
+	<div class="container">
+		<Header/>
+		<GameBoard/>
+		<Keyboard/>
+	</div>
 </div>
 
 <style>
-	div{
+	#app{
+		width: 100vw;
+		height: 100%;
+		background-color: var(--color-background);
+		display: flex;
+  		justify-content: center;
+	}
+	.container{
 		width:var(--width);
 		height: 100vh;
 		display: flex;

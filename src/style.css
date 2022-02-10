@@ -15,7 +15,6 @@
   /* Global Styles */
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 10px;
-  background-color: var(--color-tone-1);
   display: flex;
   justify-content: center;
   --width: 500px;
