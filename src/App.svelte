@@ -5,8 +5,15 @@
 	import Keyboard from "./components/Keyboard.svelte";
 </script>
 
-<Header/>
-<GameBoard/>
-<Keyboard/>
+<div class="nightmode">
+	<Header/>
+	<GameBoard/>
+	<Keyboard/>
+</div>
 
-
+<style>
+	div{
+		width:var(--width);
+	}
+	
+</style>
