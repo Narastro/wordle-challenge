@@ -44,6 +44,7 @@
         align-content: flex-end;
         grid-template-rows: repeat(3,58px);
         gap:5px;
+        padding-bottom: 10px;
     }
     .grid-row{
         display: grid;
