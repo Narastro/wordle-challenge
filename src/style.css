@@ -13,10 +13,8 @@
   --orange: #f5793a;
   --blue: #85c0f9;
   /* Global Styles */
-  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   font-size: 10px;
-  display: flex;
-  justify-content: center;
   --width: 500px;
   --header-height: 50px;
   --keyboard-height: 200px;
