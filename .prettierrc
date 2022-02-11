@@ -1,6 +1,6 @@
 {
   "arrowParens": "avoid",
-  "bracketSpacing": false,
+  "bracketSpacing": true,
   "singleQuote": true,
   "svelteSortOrder": "options-scripts-markup-styles",
   "trailingComma": "none"
