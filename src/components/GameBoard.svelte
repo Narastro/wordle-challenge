@@ -1,49 +1,16 @@
 <script>
+  import { history, inputWords } from '../store';
+  import { ITEM_NUM } from '../utils/const';
+
+  const gridArr = new Array(ITEM_NUM).fill(0).map((v, i) => i);
+  let totalLetters = $history + $inputWords;
+  console.log(gridArr);
 </script>
 
 <div class="container">
-  <div class="grid-row try-1">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
-  <div class="grid-row try-2">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
-  <div class="grid-row try-3">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
-  <div class="grid-row try-4">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
-  <div class="grid-row try-5">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
-  <div class="grid-row try-6">
-    <div class="grid-column letter-1" />
-    <div class="grid-column letter-2" />
-    <div class="grid-column letter-3" />
-    <div class="grid-column letter-4" />
-    <div class="grid-column letter-5" />
-  </div>
+  {#each gridArr as num}
+    <div class="grid letter-{num}">{totalLetters[num] ?? ''}</div>
+  {/each}
 </div>
 
 <style>
@@ -53,14 +20,11 @@
     justify-content: center;
     align-content: center;
     grid-template-rows: repeat(6, 50px);
-    gap: 5px;
-  }
-  .grid-row {
-    display: grid;
     grid-template-columns: repeat(5, 50px);
     gap: 5px;
   }
-  .grid-column {
+  .grid {
     border: 1px solid var(--color-tone-4);
+    color: white;
   }
 </style>
