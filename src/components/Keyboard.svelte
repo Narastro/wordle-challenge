@@ -1,8 +1,35 @@
 <script>
+  import { inputWords } from '../store';
   import { keys } from '../utils/const';
+  import { slice5Word } from '../utils/wordUtils';
+
+  const updateInputWords = key =>
+    inputWords.update(word => slice5Word(word + key));
+
+  const deleteInputWords = () => inputWords.update(word => word.slice(0, -1));
+
+  const enterInputWords = () => null; //enter!!
+
+  const onKeydown = e => {
+    const { keyCode } = e;
+    if (keyCode === 8) return deleteInputWords();
+    else if (keyCode === 13) return enterInputWords();
+    else if (keyCode < 65 || keyCode > 90) return;
+    const key = String.fromCharCode(keyCode);
+    updateInputWords(key);
+  };
+
+  const onClickKey = e => {
+    const { key } = e.target.dataset;
+    if (!key) return;
+    else if (key === 'BACK') return deleteInputWords();
+    else if (key === 'ENTER') return enterInputWords();
+    updateInputWords(key);
+  };
 </script>
 
-<div class="container">
+<svelte:window on:keydown={onKeydown} />
+<div class="container" on:click={onClickKey}>
   {#each keys as keysRow, i}
     <div class="grid-row row-{i}">
       {#each keysRow as key}
@@ -34,6 +61,7 @@
     background-color: var(--key-bg);
     border-radius: 3px;
     color: var(--key-text-color);
+    cursor: pointer;
   }
   .row-0 {
     grid-template-columns: repeat(10, 43px);
