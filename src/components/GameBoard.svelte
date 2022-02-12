@@ -1,15 +1,15 @@
 <script>
-  import { history, inputWords } from '../store';
+  import { totalLetters } from '../store';
   import { ITEM_NUM } from '../utils/const';
 
   const gridArr = new Array(ITEM_NUM).fill(0).map((v, i) => i);
-  let totalLetters = $history + $inputWords;
-  console.log(gridArr);
 </script>
 
 <div class="container">
   {#each gridArr as num}
-    <div class="grid letter-{num}">{totalLetters[num] ?? ''}</div>
+    <div class="grid letter-{num} {$totalLetters[num] ? 'on' : ''}">
+      {$totalLetters[num] ?? ''}
+    </div>
   {/each}
 </div>
 
@@ -26,5 +26,12 @@
   .grid {
     border: 1px solid var(--color-tone-4);
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+  }
+  .on {
+    border: 1px solid var(--color-tone-3);
   }
 </style>
