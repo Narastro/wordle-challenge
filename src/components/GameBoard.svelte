@@ -33,5 +33,14 @@
   }
   .on {
     border: 1px solid var(--color-tone-3);
+    animation: fadeIn 0.1s;
+  }
+  @keyframes fadeIn {
+    from {
+      transform: scale(1.2);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 </style>
