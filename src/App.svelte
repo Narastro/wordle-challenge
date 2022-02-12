@@ -17,7 +17,6 @@
   #app {
     width: 100vw;
     height: 100%;
-    background-color: var(--color-background);
     display: flex;
     justify-content: center;
   }

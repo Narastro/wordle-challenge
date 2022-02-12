@@ -83,3 +83,6 @@
   --key-bg-correct: var(--color-correct);
   --key-bg-absent: var(--color-absent);
 }
+body {
+  background-color: var(--color-background);
+}
