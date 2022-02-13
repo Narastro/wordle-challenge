@@ -1,5 +1,8 @@
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
-export const attempts = writable(0);
-export const inputWords = writable('');
-export const history = writable({});
+export const inputWord = writable('');
+export const preWords = writable('');
+export const totalWords = derived(
+  [inputWord, preWords],
+  ([$inputWord, $preWords]) => $inputWord + $preWords
+);

@@ -1,14 +1,14 @@
 <script>
-  import { totalLetters } from '../store';
-  import { ITEM_NUM } from '../utils/const';
+  import { totalWords } from '../store';
+  import { ITEM_NUM } from '../constants/settings';
 
   const gridArr = new Array(ITEM_NUM).fill(0).map((v, i) => i);
 </script>
 
 <div class="container">
   {#each gridArr as num}
-    <div class="grid letter-{num} {$totalLetters[num] ? 'on' : ''}">
-      {$totalLetters[num] ?? ''}
+    <div class="grid letter-{num} {$totalWords[num] ? 'on' : ''}">
+      {$totalWords[num] ?? ''}
     </div>
   {/each}
 </div>
