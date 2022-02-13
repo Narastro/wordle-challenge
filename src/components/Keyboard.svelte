@@ -1,8 +1,13 @@
 <script>
-  import { inputWord, preWords } from '../store';
+  import { inputWord, preWords, animationRunning } from '../store';
   import { KEYS } from '../constants/keys';
-  import { LACK_WORD_LEN, NOT_EXIST_WORD } from '../constants/messages';
+  import { LACK_WORD_LEN, NOT_EXIST_WORD, CORRECT_ANS, GAME_OVER } from '../constants/messages';
+  import { ITEM_NUM, ANIMATION_TIME } from '../constants/settings';
   import { sliceWord, fitWordLength, findExistWord, todayWord } from '../utils/wordUtils';
+
+  const runAnimation = () => {
+    return;
+  };
 
   const updateInputWord = key => inputWord.update(word => sliceWord(word + key));
 
@@ -14,14 +19,19 @@
   const deleteInputWord = () => inputWord.update(word => word.slice(0, -1));
 
   const enterInputWords = () => {
+    if ($animationRunning) return;
     if (!fitWordLength($inputWord)) return alert(LACK_WORD_LEN);
     if (!findExistWord($inputWord)) return alert(NOT_EXIST_WORD);
+    runAnimation();
     storeInputWord();
+    if (todayWord() === $inputWord) return alert(CORRECT_ANS);
+    if ($preWords.length === ITEM_NUM) return alert(GAME_OVER);
   };
 
   const onKeydown = e => {
     const { keyCode } = e;
-    if (keyCode === 8) return deleteInputWord();
+    if ($animationRunning) return;
+    else if (keyCode === 8) return deleteInputWord();
     else if (keyCode === 13) return enterInputWords();
     else if (keyCode < 65 || keyCode > 90) return;
     const key = String.fromCharCode(keyCode);
@@ -30,7 +40,7 @@
 
   const onClickKey = e => {
     const { key } = e.target.dataset;
-    if (!key) return;
+    if (!key || $animationRunning) return;
     else if (key === 'BACK') return deleteInputWord();
     else if (key === 'ENTER') return enterInputWords();
     updateInputWord(key);
