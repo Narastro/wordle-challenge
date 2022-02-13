@@ -1,4 +1,4 @@
-<header>WORDLE</header>
+<header>WORDALE</header>
 
 <style>
   header {
