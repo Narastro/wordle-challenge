@@ -1,12 +1,36 @@
 <script>
-  import { inputWord, preWords, animationRunning } from '../store';
+  import { history, inputWord, preWords, animationRunning, gameOver } from '../store';
   import { KEYS } from '../constants/keys';
   import { LACK_WORD_LEN, NOT_EXIST_WORD, CORRECT_ANS, GAME_OVER } from '../constants/messages';
-  import { ITEM_NUM, ANIMATION_TIME } from '../constants/settings';
+  import { ITEM_NUM, ANIMATION_TIME, WORDS_LEN } from '../constants/settings';
   import { sliceWord, fitWordLength, findExistWord, todayWord } from '../utils/wordUtils';
 
+  const scoreWord = () => {
+    const answer = todayWord();
+    const word = $inputWord;
+    const OFFSET = $history.attempts * 5;
+    for (let i = 0; i < WORDS_LEN; i++) {
+      const letter = word[i];
+      const isCorrect = answer[i] === letter;
+      if (answer.includes(letter))
+        history.update(obj => {
+          obj.answers.set(
+            letter,
+            isCorrect ? 'correct' : obj.answers.has(letter) ? obj.answers.get(letter) : 'present'
+          );
+          obj.answers.set(OFFSET + i, isCorrect ? 'correct' : 'present');
+          return obj;
+        });
+    }
+  };
+
   const runAnimation = () => {
-    return;
+    animationRunning.set(true);
+    history.update(obj => {
+      obj.attempts = obj.attempts + 1;
+      return obj;
+    });
+    setTimeout(() => animationRunning.set(false), ANIMATION_TIME);
   };
 
   const updateInputWord = key => inputWord.update(word => sliceWord(word + key));
@@ -19,18 +43,22 @@
   const deleteInputWord = () => inputWord.update(word => word.slice(0, -1));
 
   const enterInputWords = () => {
-    if ($animationRunning) return;
+    if ($animationRunning || $gameOver) return;
     if (!fitWordLength($inputWord)) return alert(LACK_WORD_LEN);
     if (!findExistWord($inputWord)) return alert(NOT_EXIST_WORD);
+    if (todayWord() === $inputWord) {
+      alert(CORRECT_ANS);
+      gameOver.set(true);
+    }
+    scoreWord();
     runAnimation();
     storeInputWord();
-    if (todayWord() === $inputWord) return alert(CORRECT_ANS);
     if ($preWords.length === ITEM_NUM) return alert(GAME_OVER);
   };
 
   const onKeydown = e => {
     const { keyCode } = e;
-    if ($animationRunning) return;
+    if ($animationRunning || $gameOver) return;
     else if (keyCode === 8) return deleteInputWord();
     else if (keyCode === 13) return enterInputWords();
     else if (keyCode < 65 || keyCode > 90) return;
@@ -40,7 +68,7 @@
 
   const onClickKey = e => {
     const { key } = e.target.dataset;
-    if (!key || $animationRunning) return;
+    if (!key || $animationRunning || $gameOver) return;
     else if (key === 'BACK') return deleteInputWord();
     else if (key === 'ENTER') return enterInputWords();
     updateInputWord(key);
@@ -52,7 +80,7 @@
   {#each KEYS as keysRow, i}
     <div class="grid-row row-{i}">
       {#each keysRow as key}
-        <div class="grid-item" data-key={key}>{key}</div>
+        <div class="grid-item {$history.answers.get(key)}" data-key={key}>{key}</div>
       {/each}
     </div>
   {/each}
@@ -90,5 +118,11 @@
   }
   .row-2 {
     grid-template-columns: 65px repeat(7, 43px) 65px;
+  }
+  .correct {
+    background-color: var(--color-correct);
+  }
+  .present {
+    background-color: var(--color-present);
   }
 </style>
