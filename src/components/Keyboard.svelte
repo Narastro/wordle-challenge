@@ -1,8 +1,8 @@
 <script>
   import { inputWord } from '../store';
-  import { keys } from '../constants/keys';
-  import { lackWordLength } from '../constants/messages';
-  import { sliceWord, fitWordLength } from '../utils/wordUtils';
+  import { KEYS } from '../constants/keys';
+  import { LACK_WORD_LEN, NOT_EXIST_WORD } from '../constants/messages';
+  import { sliceWord, fitWordLength, findExistWord } from '../utils/wordUtils';
 
   const updateInputWords = key =>
     inputWord.update(word => sliceWord(word + key));
@@ -10,7 +10,8 @@
   const deleteInputWords = () => inputWord.update(word => word.slice(0, -1));
 
   const enterInputWords = () => {
-    if (!fitWordLength($inputWord)) alert(lackWordLength);
+    if (!fitWordLength($inputWord)) return alert(LACK_WORD_LEN);
+    if (!findExistWord($inputWord)) return alert(NOT_EXIST_WORD);
   };
 
   const onKeydown = e => {
@@ -33,7 +34,7 @@
 
 <svelte:window on:keydown={onKeydown} />
 <div class="container" on:click={onClickKey}>
-  {#each keys as keysRow, i}
+  {#each KEYS as keysRow, i}
     <div class="grid-row row-{i}">
       {#each keysRow as key}
         <div class="grid-item" data-key={key}>{key}</div>
