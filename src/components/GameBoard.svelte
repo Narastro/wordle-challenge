@@ -10,7 +10,7 @@
     <div
       class="grid letter-{num} {$totalWords[num] ? 'on' : ''}
       {parseInt(num / WORDS_LEN) < $history.attempts ? 'checked' : ''} ani-{num % 5}
-      {$history.answers.has(num) && $history.answers.get(num)}"
+      {$history.answers[num] && $history.answers[num]}"
     >
       {$totalWords[num] ?? ''}
     </div>

@@ -14,11 +14,8 @@
       const isCorrect = answer[i] === letter;
       if (answer.includes(letter))
         history.update(obj => {
-          obj.answers.set(
-            letter,
-            isCorrect ? 'correct' : obj.answers.has(letter) ? obj.answers.get(letter) : 'present'
-          );
-          obj.answers.set(OFFSET + i, isCorrect ? 'correct' : 'present');
+          obj.answers[letter] = isCorrect ? 'correct' : obj.answers[letter] ? obj.answers[letter] : 'present';
+          obj.answers[OFFSET + i] = isCorrect ? 'correct' : 'present';
           return obj;
         });
     }
@@ -80,7 +77,7 @@
   {#each KEYS as keysRow, i}
     <div class="grid-row row-{i}">
       {#each keysRow as key}
-        <div class="grid-item {$history.answers.get(key)}" data-key={key}>{key}</div>
+        <div class="grid-item {$history.answers[key]}" data-key={key}>{key}</div>
       {/each}
     </div>
   {/each}
