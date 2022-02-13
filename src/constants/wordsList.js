@@ -1,4 +1,4 @@
-export const VALID_GUESSES = [
+export const WORDS_LIST = [
   'aahed',
   'aalii',
   'aargh',
