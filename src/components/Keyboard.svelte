@@ -1,34 +1,39 @@
 <script>
-  import { inputWord } from '../store';
+  import { inputWord, preWords } from '../store';
   import { KEYS } from '../constants/keys';
   import { LACK_WORD_LEN, NOT_EXIST_WORD } from '../constants/messages';
-  import { sliceWord, fitWordLength, findExistWord } from '../utils/wordUtils';
+  import { sliceWord, fitWordLength, findExistWord, todayWord } from '../utils/wordUtils';
 
-  const updateInputWords = key =>
-    inputWord.update(word => sliceWord(word + key));
+  const updateInputWord = key => inputWord.update(word => sliceWord(word + key));
 
-  const deleteInputWords = () => inputWord.update(word => word.slice(0, -1));
+  const storeInputWord = () => {
+    preWords.update(words => words + $inputWord);
+    inputWord.set('');
+  };
+
+  const deleteInputWord = () => inputWord.update(word => word.slice(0, -1));
 
   const enterInputWords = () => {
     if (!fitWordLength($inputWord)) return alert(LACK_WORD_LEN);
     if (!findExistWord($inputWord)) return alert(NOT_EXIST_WORD);
+    storeInputWord();
   };
 
   const onKeydown = e => {
     const { keyCode } = e;
-    if (keyCode === 8) return deleteInputWords();
+    if (keyCode === 8) return deleteInputWord();
     else if (keyCode === 13) return enterInputWords();
     else if (keyCode < 65 || keyCode > 90) return;
     const key = String.fromCharCode(keyCode);
-    updateInputWords(key);
+    updateInputWord(key);
   };
 
   const onClickKey = e => {
     const { key } = e.target.dataset;
     if (!key) return;
-    else if (key === 'BACK') return deleteInputWords();
+    else if (key === 'BACK') return deleteInputWord();
     else if (key === 'ENTER') return enterInputWords();
-    updateInputWords(key);
+    updateInputWord(key);
   };
 </script>
 
