@@ -1,14 +1,17 @@
 <script>
-  import { inputWords } from '../store';
-  import { keys } from '../utils/const';
-  import { slice5Word } from '../utils/wordUtils';
+  import { inputWord } from '../store';
+  import { keys } from '../constants/keys';
+  import { lackWordLength } from '../constants/messages';
+  import { sliceWord, fitWordLength } from '../utils/wordUtils';
 
   const updateInputWords = key =>
-    inputWords.update(word => slice5Word(word + key));
+    inputWord.update(word => sliceWord(word + key));
 
-  const deleteInputWords = () => inputWords.update(word => word.slice(0, -1));
+  const deleteInputWords = () => inputWord.update(word => word.slice(0, -1));
 
-  const enterInputWords = () => null; //enter!!
+  const enterInputWords = () => {
+    if (!fitWordLength($inputWord)) alert(lackWordLength);
+  };
 
   const onKeydown = e => {
     const { keyCode } = e;
