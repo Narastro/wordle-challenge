@@ -1,39 +1,83 @@
 <script>
-  import { inputWords } from '../store';
-  import { keys } from '../utils/const';
-  import { slice5Word } from '../utils/wordUtils';
+  import { history, inputWord, preWords, animationRunning, gameOver } from '../store';
+  import { KEYS } from '../constants/keys';
+  import { LACK_WORD_LEN, NOT_EXIST_WORD, CORRECT_ANS, GAME_OVER } from '../constants/messages';
+  import { ITEM_NUM, ANIMATION_TIME, WORDS_LEN } from '../constants/settings';
+  import { sliceWord, fitWordLength, findExistWord, todayWord } from '../utils/wordUtils';
 
-  const updateInputWords = key =>
-    inputWords.update(word => slice5Word(word + key));
+  const scoreWord = () => {
+    const answer = todayWord();
+    const word = $inputWord;
+    const OFFSET = $history.attempts * 5;
+    for (let i = 0; i < WORDS_LEN; i++) {
+      const letter = word[i];
+      const isCorrect = answer[i] === letter;
+      if (answer.includes(letter))
+        history.update(obj => {
+          obj.answers[letter] = isCorrect ? 'correct' : obj.answers[letter] ? obj.answers[letter] : 'present';
+          obj.answers[OFFSET + i] = isCorrect ? 'correct' : 'present';
+          return obj;
+        });
+    }
+  };
 
-  const deleteInputWords = () => inputWords.update(word => word.slice(0, -1));
+  const runAnimation = () => {
+    animationRunning.set(true);
+    history.update(obj => {
+      obj.attempts = obj.attempts + 1;
+      return obj;
+    });
+    setTimeout(() => animationRunning.set(false), ANIMATION_TIME);
+  };
 
-  const enterInputWords = () => null; //enter!!
+  const updateInputWord = key => inputWord.update(word => sliceWord(word + key));
+
+  const storeInputWord = () => {
+    preWords.update(words => words + $inputWord);
+    inputWord.set('');
+  };
+
+  const deleteInputWord = () => inputWord.update(word => word.slice(0, -1));
+
+  const enterInputWords = () => {
+    if ($animationRunning || $gameOver) return;
+    if (!fitWordLength($inputWord)) return alert(LACK_WORD_LEN);
+    if (!findExistWord($inputWord)) return alert(NOT_EXIST_WORD);
+    if (todayWord() === $inputWord) {
+      alert(CORRECT_ANS);
+      gameOver.set(true);
+    }
+    scoreWord();
+    runAnimation();
+    storeInputWord();
+    if ($preWords.length === ITEM_NUM) return alert(GAME_OVER);
+  };
 
   const onKeydown = e => {
     const { keyCode } = e;
-    if (keyCode === 8) return deleteInputWords();
+    if ($animationRunning || $gameOver) return;
+    else if (keyCode === 8) return deleteInputWord();
     else if (keyCode === 13) return enterInputWords();
     else if (keyCode < 65 || keyCode > 90) return;
     const key = String.fromCharCode(keyCode);
-    updateInputWords(key);
+    updateInputWord(key);
   };
 
   const onClickKey = e => {
     const { key } = e.target.dataset;
-    if (!key) return;
-    else if (key === 'BACK') return deleteInputWords();
+    if (!key || $animationRunning || $gameOver) return;
+    else if (key === 'BACK') return deleteInputWord();
     else if (key === 'ENTER') return enterInputWords();
-    updateInputWords(key);
+    updateInputWord(key);
   };
 </script>
 
 <svelte:window on:keydown={onKeydown} />
 <div class="container" on:click={onClickKey}>
-  {#each keys as keysRow, i}
+  {#each KEYS as keysRow, i}
     <div class="grid-row row-{i}">
       {#each keysRow as key}
-        <div class="grid-item" data-key={key}>{key}</div>
+        <div class="grid-item {$history.answers[key]}" data-key={key}>{key}</div>
       {/each}
     </div>
   {/each}
@@ -71,5 +115,11 @@
   }
   .row-2 {
     grid-template-columns: 65px repeat(7, 43px) 65px;
+  }
+  .correct {
+    background-color: var(--color-correct);
+  }
+  .present {
+    background-color: var(--color-present);
   }
 </style>
