@@ -12,7 +12,7 @@
       {parseInt(num / WORDS_LEN) < $history.attempts ? 'checked' : ''} ani-{num % 5}
       {$history.answers[num] && $history.answers[num]}"
     >
-      {$totalWords[num] ?? ''}
+      {$totalWords[num] || ''}
     </div>
   {/each}
 </div>
