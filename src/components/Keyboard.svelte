@@ -4,6 +4,16 @@
   import { LACK_WORD_LEN, NOT_EXIST_WORD, CORRECT_ANS, GAME_OVER } from '../constants/messages';
   import { ITEM_NUM, ANIMATION_TIME, WORDS_LEN } from '../constants/settings';
   import { sliceWord, fitWordLength, findExistWord, todayWord } from '../utils/wordUtils';
+  import { fromEvent } from 'rxjs';
+  import { throttleTime, map, scan } from 'rxjs/operators';
+
+  fromEvent(document.body, 'click')
+    .pipe(
+      throttleTime(1000),
+      map(event => event.clientX),
+      scan((count, clientX) => count + clientX, 0)
+    )
+    .subscribe(count => console.log(count));
 
   const scoreWord = () => {
     const answer = todayWord();
